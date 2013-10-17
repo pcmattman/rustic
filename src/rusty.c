@@ -14,30 +14,9 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/// Rust entry point.
-extern int main(int, char **);
-
-/// Prototype for abort(), for the attribute.
-void abort() __attribute__((noreturn));
-
-/// Poke a byte into memory at the given address.
-void poke(unsigned int addr, unsigned char val) {
-    *((unsigned char *) addr) = val;
-}
-
-/// Read a byte from memory at the given address.
-unsigned char peek(unsigned int addr) {
-    return *((unsigned char *) addr);
-}
 
 /// Required by Rust. \todo Needs to be implemented!
-void __morestack() {
-}
-
-/// Required by zero.rs, and needs to be more noisy.
-void abort() {
-    while(1) asm volatile("cli;hlt");
-}
+void __morestack() {}
 
 /**
  * Ultra stupid malloc for quick testing (replace me with dlmalloc or write me
@@ -55,9 +34,16 @@ void *malloc(unsigned int len) {
     return (void *) ret;
 }
 
-/// Even more naive free()
-void free(void *p) {
+/// Even more naive free().
+void free(void *p) {}
+
+/// And memory unsafe realloc().
+void *realloc(void *p, unsigned int len) {
+    return p;
 }
+
+/// Rust entry point.
+extern int main(int, char **);
 
 /// Entry point from the assembly code startup code.
 void _cstart() {
