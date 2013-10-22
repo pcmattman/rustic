@@ -15,8 +15,7 @@ CC := $(LLVM_ROOT)/bin/clang
 CFLAGS := -O3 -target $(TARGET)
 
 RC := $(RUST_ROOT)/bin/rustc
-# TODO (eddyb) replace cfg(libc) in rust-core with cfg(allocator=custom)
-RCFLAGS := --opt-level=2 --cfg libc --target $(TARGET)
+RCFLAGS := --opt-level=2 --cfg has_heap_impl --target $(TARGET)
 
 LD := $(GCC_PREFIX)ld
 LDFLAGS := -nostdlib -m $(MACHINE) -Tsrc/linker.ld

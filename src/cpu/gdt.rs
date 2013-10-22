@@ -67,11 +67,10 @@ static mut systemgdt: table = table {
     reg: 0 as *mut gdtreg,
 };
 
-#[fixed_stack_segment]
 pub fn init() {
     unsafe {
-        systemgdt.table = core::libc::malloc(128) as *mut gdttable;
-        systemgdt.reg = core::libc::malloc(6) as *mut gdtreg;
+        systemgdt.table = core::heap::malloc_raw(128) as *mut gdttable;
+        systemgdt.reg = core::heap::malloc_raw(6) as *mut gdtreg;
         *systemgdt.reg = gdtreg::new(systemgdt.table as *gdttable);
     }
 }

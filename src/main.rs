@@ -13,6 +13,8 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
+#[feature(globs)];
+#[feature(macro_rules)];
 #[no_std];
 
 #[path = "rust-core/core/mod.rs"]
@@ -38,6 +40,13 @@ pub extern "C" fn abort() {
     serial::write("ABORT");
     cpu::setirqs(false);
     loop {}
+}
+
+// Memory management.
+mod mem;
+
+mod core_heap_impl {
+    pub use mem::heap_impl::*;
 }
 
 #[start]
