@@ -95,12 +95,11 @@ pub fn register(index: int, handler: extern "Rust" fn(n: uint)) {
     }
 }
 
-#[fixed_stack_segment]
 pub fn init() {
     unsafe {
-        systemidt.table = core::libc::malloc(2048) as *mut idttable;
-        systemidt.reg = core::libc::malloc(6) as *mut idtreg;
-        systemidt.handlers = core::libc::malloc(2048) as *mut handlers;
+        systemidt.table = core::heap::malloc_raw(2048) as *mut idttable;
+        systemidt.reg = core::heap::malloc_raw(6) as *mut idtreg;
+        systemidt.handlers = core::heap::malloc_raw(2048) as *mut handlers;
         *systemidt.reg = idtreg::new(systemidt.table as *idttable);
     }
 
@@ -118,7 +117,6 @@ pub fn init() {
 }
 
 #[no_mangle]
-#[fixed_stack_segment]
 pub extern "C" fn isr_rustentry(which: uint) {
     // Entry point for IRQ - find if we have a handler configured or not.
     let x: handler = unsafe { (*systemidt.handlers)[which] };

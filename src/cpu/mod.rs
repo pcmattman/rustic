@@ -19,6 +19,9 @@ use serial;
 mod gdt;
 pub mod idt;
 
+pub static MAX_CPUS: uint = 1;
+pub fn id() -> uint { 0 }
+
 // External variable in assembly code (not actually a function)
 extern { fn tls_emul_segment(); }
 

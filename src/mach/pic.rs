@@ -32,7 +32,6 @@ pub static RemapBase: int = 0x20;
 
 static mut irqhandlers: *mut handlers = 0 as *mut handlers;
 
-#[fixed_stack_segment]
 pub fn init() {
     io::outport(0x20, 0x11u8);
     io::outport(0xA0, 0x11u8);
@@ -48,7 +47,7 @@ pub fn init() {
     io::outport(0xA1, 0xFFu8);
 
     // Allocate space for our handler list.
-    unsafe { irqhandlers = core::libc::malloc(192) as *mut handlers; }
+    unsafe { irqhandlers = core::heap::malloc_raw(192) as *mut handlers; }
 
     // Set handlers, set IRQ entries on the CPU.
     let mut i = 0;
